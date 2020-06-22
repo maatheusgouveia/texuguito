@@ -84,21 +84,21 @@ client.on("message", async (msg) => {
 			}
 
 			try {
-				const { email, password } = await UserController.find(
-					msg.author.username
-				);
+				const user = await UserController.find(msg.author.username);
 
-				if (!email || !password) {
+				if (!user || !user.email || !user.password) {
 					msg.author.send(
 						"Parece que eu ainda não tenho suas credenciais do GooBee, pode me passar?"
 					);
 					msg.author.send(
-						"O comando é `!login texuguito@cadmus.com.br 123456`, você só precisa substituir o primeiro parâmetro pelo seu email e o segundo pela sua senha"
+						"O comando é `!login texuguito@cadmus.com.br 123456`, você só precisa substituir o primeiro parâmetro pelo seu user.email e o user.segundo pela sua senha"
 					);
 					return msg.author.send(
 						"Pode ficar tranquilo porque é tudo criptografado"
 					);
 				}
+
+				const { email, password } = user;
 
 				let [, sentimento = 2] = msg.content.split(" ");
 
@@ -173,6 +173,7 @@ client.on("message", async (msg) => {
 							});
 					});
 			} catch (error) {
+				console.log(error);
 				msg.reply("Parece que algo deu errado");
 			}
 		}

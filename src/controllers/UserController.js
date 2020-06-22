@@ -39,15 +39,27 @@ module.exports = {
 	},
 
 	async find(username) {
-		const [user] = await connection("users")
-			.select("email", "username", "password")
-			.where({ username });
+		try {
+			const [user] = await connection("users")
+				.select("email", "username", "password")
+				.where({ username });
 
-		const unencryptedPassword = Crypto.AES.decrypt(user.password, secret);
+			if (user) {
+				const unencryptedPassword = Crypto.AES.decrypt(
+					user.password,
+					secret
+				);
 
-		return {
-			...user,
-			password: unencryptedPassword.toString(Crypto.enc.Utf8),
-		};
+				return {
+					...user,
+					password: unencryptedPassword.toString(Crypto.enc.Utf8),
+				};
+			}
+
+			return null;
+		} catch (error) {
+			console.log(error);
+			return null;
+		}
 	},
 };
