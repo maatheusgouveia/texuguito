@@ -35,6 +35,11 @@ client.on("message", async (msg) => {
 						name: "Email GooBee",
 						value: email,
 						inline: true,
+					},
+					{
+						name: ".",
+						value: ".",
+						inline: true,
 					}
 				)
 			);

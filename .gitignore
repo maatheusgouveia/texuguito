@@ -3,3 +3,6 @@
 .env
 
 src/database/*.sqlite
+
+package-lock.json
+yarn.lock
