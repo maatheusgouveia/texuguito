@@ -17,3 +17,5 @@ cron.schedule("59 10 * * TUE-FRI", () => dailyReminder(), {
 cron.schedule("20 16 * * MON-FRI", () => setMoodReminder(), {
 	timezone: "America/Sao_Paulo",
 });
+
+console.log("Jobs online");

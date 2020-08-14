@@ -5,6 +5,8 @@ const client = new Client();
 
 async function planningReminder() {
 	await client.login(token);
+	await client.fetchApplication();
+
 	console.log("Enviando lembrete da planning");
 
 	const response = await axios.get(

@@ -11,7 +11,6 @@ module.exports = {
 
 			if (!moodExists) {
 				await connection("daily_mood").insert({ username, mood });
-				console.log("inseriu");
 			} else {
 				await connection("daily_mood")
 					.update({
@@ -36,7 +35,7 @@ module.exports = {
 				.where({ username })
 				.where("created_at", ">=", startOfDay(new Date()));
 
-			return null;
+			return mood;
 		} catch (error) {
 			console.log(error);
 			return null;

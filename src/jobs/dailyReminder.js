@@ -5,6 +5,8 @@ const client = new Client();
 
 async function dailyReminder() {
 	await client.login(token);
+	await client.fetchApplication();
+
 	console.log("Enviando lembrete da daily");
 
 	const response = await axios.get(

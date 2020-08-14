@@ -71,10 +71,10 @@ client.on("message", async (msg) => {
 				} else {
 					msg.reply("Não consegui salvar suas credenciais");
 				}
+				msg.channel.stopTyping();
 			} catch (error) {
 				msg.reply("Não consegui salvar suas credenciais");
 			}
-			msg.channel.stopTyping();
 		}
 
 		if (msg.content === `${prefix}health`) {
@@ -106,7 +106,7 @@ client.on("message", async (msg) => {
 						"Parece que eu ainda não tenho suas credenciais do GooBee, pode me passar?"
 					);
 					msg.author.send(
-						"O comando é `!login texuguito@cadmus.com.br 123456`, você só precisa substituir o primeiro parâmetro pelo seu user.email e o user.segundo pela sua senha"
+						"O comando é `!login texuguito@cadmus.com.br 123456`, você só precisa substituir o primeiro parâmetro pelo seu email e o segundo pela sua senha"
 					);
 					return msg.author.send(
 						"Pode ficar tranquilo porque é tudo criptografado"
