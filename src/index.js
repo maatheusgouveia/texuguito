@@ -17,6 +17,7 @@ client.on("ready", () => {
 client.on("message", async (msg) => {
 	if (msg.content.includes(prefix)) {
 		if (msg.content === `${prefix}users`) {
+			msg.channel.startTyping();
 			const users = await UserController.index();
 
 			const usersList = new MessageEmbed()
@@ -45,9 +46,11 @@ client.on("message", async (msg) => {
 			);
 
 			msg.channel.send(usersList);
+			msg.channel.stopTyping();
 		}
 
 		if (msg.content.startsWith(`${prefix}login`)) {
+			msg.channel.startTyping();
 			try {
 				if (msg.content.includes("-h")) {
 					return msg.reply(
@@ -71,24 +74,31 @@ client.on("message", async (msg) => {
 			} catch (error) {
 				msg.reply("Não consegui salvar suas credenciais");
 			}
+			msg.channel.stopTyping();
 		}
 
 		if (msg.content === `${prefix}health`) {
+			msg.channel.startTyping();
 			msg.reply("Opa, tô aqui");
+			msg.channel.stopTyping();
 		}
 
 		if (msg.content.startsWith(`${prefix}humor`)) {
 			if (msg.content.includes("-h")) {
-				return msg.reply(
+				msg.channel.startTyping();
+				msg.reply(
 					"Para definir um novo humor ou editar o existente basta utilizar o comando `!humor`, ele recebe apenas um parâmetro que deve " +
 						"ser uma das opções: \n" +
 						"String: feliz, neutro ou irritado \n" +
 						"Inteiro 1, 2 ou 3. \n" +
 						'Caso nenhum valor for informado o padrão é "neutro"'
 				);
+				msg.channel.stopTyping();
+				return;
 			}
 
 			try {
+				msg.channel.startTyping();
 				const user = await UserController.find(msg.author.username);
 
 				if (!user || !user.email || !user.password) {
@@ -177,9 +187,11 @@ client.on("message", async (msg) => {
 								);
 							});
 					});
+				msg.channel.stopTyping();
 			} catch (error) {
 				console.log(error);
 				msg.reply("Parece que algo deu errado");
+				msg.channel.stopTyping();
 			}
 		}
 
