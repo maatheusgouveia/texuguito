@@ -8,7 +8,7 @@ async function dailyReminder() {
 	console.log("Enviando lembrete da daily");
 
 	const response = await axios.get(
-		"https://api.tenor.com/v1/random?q=hurry&limit=1"
+		"https://api.tenor.com/v1/random?q=hurry%20you%20are%20late&limit=1"
 	);
 	const gif = response.data.results[0].media[0].gif.url;
 
