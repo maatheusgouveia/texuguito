@@ -3,6 +3,7 @@ const { token, prefix } = require("./config/bot");
 const client = new Client();
 const axios = require("axios").default;
 const UserController = require("./controllers/UserController");
+const MoodController = require("./controllers/MoodController");
 
 const sentimentos = {
 	1: "feliz",
@@ -97,102 +98,54 @@ client.on("message", async (msg) => {
 				return;
 			}
 
-			try {
-				msg.channel.startTyping();
-				const user = await UserController.find(msg.author.username);
+			msg.channel.startTyping();
+			const user = await UserController.find(msg.author.username);
 
-				if (!user || !user.email || !user.password) {
-					msg.author.send(
-						"Parece que eu ainda não tenho suas credenciais do GooBee, pode me passar?"
-					);
-					msg.author.send(
-						"O comando é `!login texuguito@cadmus.com.br 123456`, você só precisa substituir o primeiro parâmetro pelo seu email e o segundo pela sua senha"
-					);
-					return msg.author.send(
-						"Pode ficar tranquilo porque é tudo criptografado"
-					);
-				}
-
-				const { email, password } = user;
-
-				let [, sentimento = 2] = msg.content.split(" ");
-
-				if (typeof sentimento === "string") {
-					if (sentimento === "feliz") {
-						sentimento = 1;
-					} else if (sentimento === "neutro") {
-						sentimento = 2;
-					} else if (sentimento === "irritado") {
-						sentimento = 3;
-					} else {
-						msg.reply("Não conheço esse sentimento");
-					}
-				}
-
-				await axios
-					.post("https://apiteams.goobee.com.br/api/Token", {
-						usuario: email,
-						senha: password,
-					})
-					.then(async (response) => {
-						const { token, idPessoa, nome } = response.data;
-
-						axios
-							.get(
-								`https://apiteams.goobee.com.br/api/Home/InformaHumor?idPessoa=${idPessoa}`,
-								{
-									headers: {
-										authorization: `Bearer ${token}`,
-									},
-								}
-							)
-							.then(async (response) => {
-								const { idSentimentoPessoa } = response.data;
-
-								await axios.put(
-									`https://apiteams.goobee.com.br/api/Home/EditarHumor/${idSentimentoPessoa}`,
-									{
-										idSentimentoPessoa,
-										sentimento,
-									},
-									{
-										headers: {
-											authorization: `Bearer ${token}`,
-										},
-									}
-								);
-
-								msg.reply(
-									`Já coloquei o humor ${sentimentos[sentimento]} para o usuário ${nome}`
-								);
-							})
-							.catch(async () => {
-								await axios.post(
-									"https://apiteams.goobee.com.br/api/Home/AdicionarHumor",
-									{
-										idResponsavelCriacao:
-											"c8b9b675-d918-4c8a-1c56-08d7fc19244a",
-										idPessoa,
-										sentimento,
-									},
-									{
-										headers: {
-											authorization: `Bearer ${token}`,
-										},
-									}
-								);
-
-								msg.reply(
-									`Já coloquei o humor ${sentimentos[sentimento]} para o usuário ${nome}`
-								);
-							});
-					});
-				msg.channel.stopTyping();
-			} catch (error) {
-				console.log(error);
-				msg.reply("Parece que algo deu errado");
-				msg.channel.stopTyping();
+			if (!user || !user.email || !user.password) {
+				msg.author.send(
+					"Parece que eu ainda não tenho suas credenciais do GooBee, pode me passar?"
+				);
+				msg.author.send(
+					"O comando é `!login texuguito@cadmus.com.br 123456`, você só precisa substituir o primeiro parâmetro pelo seu email e o segundo pela sua senha"
+				);
+				return msg.author.send(
+					"Pode ficar tranquilo porque é tudo criptografado"
+				);
 			}
+
+			const { email, password } = user;
+
+			let [, sentimento = 2] = msg.content.split(" ");
+
+			if (typeof sentimento === "string") {
+				if (sentimento === "feliz") {
+					sentimento = 1;
+				} else if (sentimento === "neutro") {
+					sentimento = 2;
+				} else if (sentimento === "irritado") {
+					sentimento = 3;
+				} else {
+					msg.reply("Não conheço esse sentimento");
+				}
+			}
+
+			const response = await MoodController.create({
+				email,
+				password,
+				mood: sentimento,
+			});
+
+			if (response) {
+				const { nome } = response;
+
+				msg.reply(
+					`Já coloquei o humor ${sentimentos[sentimento]} para o usuário ${nome}`
+				);
+			} else {
+				msg.reply("Parece que algo deu errado");
+			}
+
+			msg.channel.stopTyping();
 		}
 
 		if (msg.content.startsWith(`${prefix}clear`)) {
