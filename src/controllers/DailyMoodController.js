@@ -1,7 +1,5 @@
 const connection = require("../database/connection");
-const Crypto = require("crypto-js");
 const { startOfDay } = require("date-fns");
-const { create } = require("./UserController");
 
 module.exports = {
 	async create({ username, mood }) {

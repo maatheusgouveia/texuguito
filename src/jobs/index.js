@@ -4,7 +4,7 @@ const setMoodReminder = require("./setMoodReminder");
 const planningReminder = require("./planningReminder");
 
 // Lembrete da planning
-cron.schedule("59 10 * * TUE-FRI", () => planningReminder(), {
+cron.schedule("0 8 * * 1", () => planningReminder(), {
 	timezone: "America/Sao_Paulo",
 });
 
