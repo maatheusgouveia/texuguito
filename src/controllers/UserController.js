@@ -21,7 +21,7 @@ module.exports = {
 					password: Crypto.AES.encrypt(password, secret).toString(),
 				});
 			} else {
-				const user = await connection("users")
+				await connection("users")
 					.update({
 						email,
 						password: Crypto.AES.encrypt(

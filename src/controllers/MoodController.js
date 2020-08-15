@@ -1,4 +1,5 @@
 const axios = require("axios").default;
+const UserController = require("./UserController");
 
 module.exports = {
 	async create({ email, password, mood }) {
@@ -55,6 +56,35 @@ module.exports = {
 			}
 
 			return { nome };
+		} catch (error) {
+			return null;
+		}
+	},
+
+	async find(username) {
+		try {
+			const { email, password } = await UserController.find(username);
+
+			const user = await axios.post(
+				"https://apiteams.goobee.com.br/api/Token",
+				{
+					usuario: email,
+					senha: password,
+				}
+			);
+
+			const { token, idPessoa } = user.data;
+
+			const currentMood = await axios.get(
+				`https://apiteams.goobee.com.br/api/Home/InformaHumor?idPessoa=${idPessoa}`,
+				{
+					headers: {
+						authorization: `Bearer ${token}`,
+					},
+				}
+			);
+
+			return currentMood.data;
 		} catch (error) {
 			return null;
 		}
