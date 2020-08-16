@@ -19,24 +19,31 @@ async function setMoodReminder() {
 
 	await Promise.all(
 		users.map(async (user) => {
-			const recipient = await UserController.find(user.username);
+			try {
+				const recipient = await UserController.find(user.username);
 
-			const moodExist = await MoodController.find(recipient.username);
-			console.log(`Enviando mensagem para ${user.username}`);
+				const moodExist = await MoodController.find(recipient.username);
+				console.log(`Enviando mensagem para ${user.username}`);
 
-			if (moodExist) {
-				await user.send("Parece que você já definiu seu humor hoje...");
-				await user.send("Caso mude de ideia é só me avisar");
-			} else {
-				await MoodController.create({
-					email: recipient.email,
-					password: recipient.password,
-					mood: 2,
-				});
-				await user.send(
-					"Parece que você ainda não definiu o seu humor, vou colocar como neutro para você ok?"
-				);
-				await user.send("Caso queira mudar é só me avisar");
+				if (moodExist.sentimento > 0) {
+					await user.send(
+						"Parece que você já definiu seu humor hoje..."
+					);
+					await user.send("Caso mude de ideia é só me avisar");
+				} else {
+					await MoodController.create({
+						email: recipient.email,
+						password: recipient.password,
+						mood: 2,
+					});
+
+					await user.send(
+						"Parece que você ainda não definiu o seu humor, vou colocar como neutro para você ok?"
+					);
+					await user.send("Caso queira mudar é só me avisar");
+				}
+			} catch (error) {
+				console.log(error);
 			}
 		})
 	);

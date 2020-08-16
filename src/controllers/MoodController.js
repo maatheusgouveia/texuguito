@@ -25,21 +25,21 @@ module.exports = {
 
 			const { idSentimentoPessoa } = currentMood.data;
 
-			const updatedMood = await axios.put(
-				`https://apiteams.goobee.com.br/api/Home/EditarHumor/${idSentimentoPessoa}`,
-				{
-					idSentimentoPessoa,
-					sentimento: mood,
-				},
-				{
-					headers: {
-						authorization: `Bearer ${token}`,
+			if (idSentimentoPessoa) {
+				await axios.put(
+					`https://apiteams.goobee.com.br/api/Home/EditarHumor/${idSentimentoPessoa}`,
+					{
+						idSentimentoPessoa,
+						sentimento: mood,
 					},
-				}
-			);
-
-			if (!updatedMood.data) {
-				const newMood = await axios.post(
+					{
+						headers: {
+							authorization: `Bearer ${token}`,
+						},
+					}
+				);
+			} else {
+				await axios.post(
 					"https://apiteams.goobee.com.br/api/Home/AdicionarHumor",
 					{
 						idResponsavelCriacao:
