@@ -9,12 +9,12 @@ cron.schedule("0 8 * * 1", () => planningReminder(), {
 });
 
 // Lembrete de daily
-cron.schedule("59 10 * * TUE-FRI", () => dailyReminder(), {
+cron.schedule("59 10 * * 2,3,4,5", () => dailyReminder(), {
 	timezone: "America/Sao_Paulo",
 });
 
 // Lembrete para definir humor
-cron.schedule("20 16 * * MON-FRI", () => setMoodReminder(), {
+cron.schedule("20 16 * * 1,2,3,4,5", () => setMoodReminder(), {
 	timezone: "America/Sao_Paulo",
 });
 
