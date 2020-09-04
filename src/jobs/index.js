@@ -1,6 +1,6 @@
 const cron = require("node-cron");
 const Sentry = require("@sentry/node");
-const sentryConfig = require("./config/sentry");
+const sentryConfig = require("../config/sentry");
 const dailyReminder = require("./dailyReminder");
 const setMoodReminder = require("./setMoodReminder");
 const planningReminder = require("./planningReminder");
