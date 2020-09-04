@@ -11,6 +11,7 @@
 		"nodemon": "^2.0.4"
 	},
 	"dependencies": {
+		"@sentry/node": "^5.22.3",
 		"axios": "^0.19.2",
 		"crypto-js": "^4.0.0",
 		"date-fns": "^2.15.0",
