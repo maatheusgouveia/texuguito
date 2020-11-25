@@ -12,7 +12,7 @@ Sentry.init({
 
 try {
 	// Lembrete da planning
-	cron.schedule("0 8 * * 1", () => planningReminder(), {
+	cron.schedule("59 9 * * 1", () => planningReminder(), {
 		timezone: "America/Sao_Paulo",
 	});
 
