@@ -1,25 +1,28 @@
-const { Client, DMChannel } = require("discord.js");
-const axios = require("axios");
+const { Client } = require("discord.js");
 const { token } = require("../config/bot");
 const client = new Client();
+const GetRandomGif = require("../services/getRandomGif");
 
 async function dailyReminder() {
-	await client.login(token);
-	await client.fetchApplication();
+	try {
+		await client.login(token);
 
-	console.log("Enviando lembrete da daily");
+		await client.fetchApplication();
 
-	const response = await axios.get(
-		"https://api.tenor.com/v1/random?q=times%20up&limit=1"
-	);
-	const gif = response.data.results[0].media[0].gif.url;
+		console.log("Enviando lembrete da daily");
 
-	const teste = client.channels.cache.find((ch) => ch.name === "teste");
+		const gif = await GetRandomGif.run("dont forget remember");
 
-	await teste.send("@everyone Bora pra daily");
-	await teste.send(gif);
+		const channel = client.channels.cache.find((ch) => ch.name === "teste");
 
-	client.destroy();
+		await channel.send("@everyone Bora pra daily");
+
+		await channel.send(gif);
+
+		client.destroy();
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 module.exports = dailyReminder;
