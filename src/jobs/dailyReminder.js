@@ -11,7 +11,7 @@ async function dailyReminder() {
 
 		console.log("Enviando lembrete da daily");
 
-		const gif = await GetRandomGif.run("dont forget remember");
+		const gif = await GetRandomGif.run("times up");
 
 		const channel = client.channels.cache.find((ch) => ch.name === "teste");
 
