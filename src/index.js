@@ -34,8 +34,13 @@ try {
 					.setTitle("Usuários logados")
 					.setTimestamp();
 
-				users.map(({ username, email }) =>
+				users.map(({ id, username, email }) =>
 					usersList.addFields(
+						{
+							name: "id",
+							value: id,
+							inline: true,
+						},
 						{
 							name: "Discord username",
 							value: username,
@@ -44,11 +49,6 @@ try {
 						{
 							name: "Email GooBee",
 							value: email,
-							inline: true,
-						},
-						{
-							name: ".",
-							value: ".",
 							inline: true,
 						}
 					)
@@ -70,6 +70,7 @@ try {
 					let [, usuario, senha] = msg.content.split(" ");
 
 					const user = await UserController.create({
+						id: msg.author.id,
 						username: msg.author.username,
 						email: usuario,
 						password: senha,
@@ -107,9 +108,9 @@ try {
 				}
 
 				msg.channel.startTyping();
-				const user = await UserController.find(msg.author.username);
+				const user = await UserController.find(msg.author.id);
 
-				if (!user || !user.email || !user.password) {
+				if (!user?.email || !user?.password) {
 					msg.author.send(
 						"Parece que eu ainda não tenho suas credenciais do GooBee, pode me passar?"
 					);

@@ -4,18 +4,23 @@ const { secret } = require("../config/crypto");
 
 module.exports = {
 	async index() {
-		const users = await connection("users").select("email", "username");
+		const users = await connection("users").select(
+			"id",
+			"email",
+			"username"
+		);
 		return users;
 	},
 
-	async create({ username, email, password }) {
+	async create({ id, username, email, password }) {
 		try {
 			const [userExists] = await connection("users")
 				.select("*")
-				.where({ username });
+				.where({ id });
 
 			if (!userExists) {
 				await connection("users").insert({
+					id,
 					username,
 					email,
 					password: Crypto.AES.encrypt(password, secret).toString(),
@@ -29,7 +34,7 @@ module.exports = {
 							secret
 						).toString(),
 					})
-					.where({ username });
+					.where({ id });
 			}
 
 			return true;
@@ -38,11 +43,11 @@ module.exports = {
 		}
 	},
 
-	async find(username) {
+	async find(id) {
 		try {
 			const [user] = await connection("users")
 				.select("email", "username", "password")
-				.where({ username });
+				.where({ id });
 
 			if (user) {
 				const unencryptedPassword = Crypto.AES.decrypt(
