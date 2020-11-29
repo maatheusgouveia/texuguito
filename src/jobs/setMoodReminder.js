@@ -58,6 +58,4 @@ async function setMoodReminder() {
 	}
 }
 
-setMoodReminder();
-
 module.exports = setMoodReminder;
