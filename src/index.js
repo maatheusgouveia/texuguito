@@ -110,7 +110,7 @@ try {
 				msg.channel.startTyping();
 				const user = await UserController.find(msg.author.id);
 
-				if (!user?.email || !user?.password) {
+				if (!user || !user.email || !user.password) {
 					msg.author.send(
 						'Parece que eu ainda não tenho suas credenciais do GooBee, pode me passar?',
 					);
