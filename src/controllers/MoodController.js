@@ -1,15 +1,15 @@
-const axios = require("axios").default;
-const UserController = require("./UserController");
+const axios = require('axios').default;
+const UserController = require('./UserController');
 
 module.exports = {
 	async create({ email, password, mood }) {
 		try {
 			const user = await axios.post(
-				"https://apiteams.goobee.com.br/api/Token",
+				'https://apiteams.goobee.com.br/api/Token',
 				{
 					usuario: email,
 					senha: password,
-				}
+				},
 			);
 
 			const { token, nome, idPessoa } = user.data;
@@ -20,7 +20,7 @@ module.exports = {
 					headers: {
 						authorization: `Bearer ${token}`,
 					},
-				}
+				},
 			);
 
 			const { idSentimentoPessoa } = currentMood.data;
@@ -36,14 +36,14 @@ module.exports = {
 						headers: {
 							authorization: `Bearer ${token}`,
 						},
-					}
+					},
 				);
 			} else {
 				await axios.post(
-					"https://apiteams.goobee.com.br/api/Home/AdicionarHumor",
+					'https://apiteams.goobee.com.br/api/Home/AdicionarHumor',
 					{
 						idResponsavelCriacao:
-							"c8b9b675-d918-4c8a-1c56-08d7fc19244a",
+							'c8b9b675-d918-4c8a-1c56-08d7fc19244a',
 						idPessoa,
 						sentimento: mood,
 					},
@@ -51,7 +51,7 @@ module.exports = {
 						headers: {
 							authorization: `Bearer ${token}`,
 						},
-					}
+					},
 				);
 			}
 
@@ -66,11 +66,11 @@ module.exports = {
 			const { email, password } = await UserController.find(username);
 
 			const user = await axios.post(
-				"https://apiteams.goobee.com.br/api/Token",
+				'https://apiteams.goobee.com.br/api/Token',
 				{
 					usuario: email,
 					senha: password,
-				}
+				},
 			);
 
 			const { token, idPessoa } = user.data;
@@ -81,7 +81,7 @@ module.exports = {
 					headers: {
 						authorization: `Bearer ${token}`,
 					},
-				}
+				},
 			);
 
 			return currentMood.data;

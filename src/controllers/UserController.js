@@ -1,37 +1,37 @@
-const connection = require("../database/connection");
-const Crypto = require("crypto-js");
-const { secret } = require("../config/crypto");
+const connection = require('../database/connection');
+const Crypto = require('crypto-js');
+const { secret } = require('../config/crypto');
 
 module.exports = {
 	async index() {
-		const users = await connection("users").select(
-			"id",
-			"email",
-			"username"
+		const users = await connection('users').select(
+			'id',
+			'email',
+			'username',
 		);
 		return users;
 	},
 
 	async create({ id, username, email, password }) {
 		try {
-			const [userExists] = await connection("users")
-				.select("*")
+			const [userExists] = await connection('users')
+				.select('*')
 				.where({ id });
 
 			if (!userExists) {
-				await connection("users").insert({
+				await connection('users').insert({
 					id,
 					username,
 					email,
 					password: Crypto.AES.encrypt(password, secret).toString(),
 				});
 			} else {
-				await connection("users")
+				await connection('users')
 					.update({
 						email,
 						password: Crypto.AES.encrypt(
 							password,
-							secret
+							secret,
 						).toString(),
 					})
 					.where({ id });
@@ -45,14 +45,14 @@ module.exports = {
 
 	async find(id) {
 		try {
-			const [user] = await connection("users")
-				.select("email", "username", "password")
+			const [user] = await connection('users')
+				.select('email', 'username', 'password')
 				.where({ id });
 
 			if (user) {
 				const unencryptedPassword = Crypto.AES.decrypt(
 					user.password,
-					secret
+					secret,
 				);
 
 				return {

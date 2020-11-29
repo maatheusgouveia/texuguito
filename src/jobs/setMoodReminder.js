@@ -1,7 +1,7 @@
-const { Client } = require("discord.js");
-const { token } = require("../config/bot");
-const UserController = require("../controllers/UserController");
-const MoodController = require("../controllers/MoodController");
+const { Client } = require('discord.js');
+const { token } = require('../config/bot');
+const UserController = require('../controllers/UserController');
+const MoodController = require('../controllers/MoodController');
 const client = new Client();
 
 async function setMoodReminder() {
@@ -11,23 +11,23 @@ async function setMoodReminder() {
 
 		await client.fetchApplication();
 
-		console.log("Enviando lembrete para usuários");
+		console.log('Enviando lembrete para usuários');
 
 		const loggedUsers = await UserController.index();
 
 		await Promise.all(
-			loggedUsers.map(async (user) => await client.users.fetch(user.id))
+			loggedUsers.map(async user => await client.users.fetch(user.id)),
 		);
 
 		const users = client.users.cache.filter(
-			(user) =>
+			user =>
 				!!loggedUsers.find(
-					(logUser) => logUser.username === user.username
-				)
+					logUser => logUser.username === user.username,
+				),
 		);
 
 		await Promise.all(
-			users.map(async (user) => {
+			users.map(async user => {
 				const recipient = await UserController.find(user.id);
 
 				const moodExist = await MoodController.find(user.id);
@@ -35,9 +35,9 @@ async function setMoodReminder() {
 
 				if (moodExist.sentimento > 0) {
 					await user.send(
-						"Parece que você já definiu seu humor hoje..."
+						'Parece que você já definiu seu humor hoje...',
 					);
-					await user.send("Caso mude de ideia é só me avisar");
+					await user.send('Caso mude de ideia é só me avisar');
 				} else {
 					await MoodController.create({
 						email: recipient.email,
@@ -46,11 +46,11 @@ async function setMoodReminder() {
 					});
 
 					await user.send(
-						"Parece que você ainda não definiu o seu humor, vou colocar como neutro para você ok?"
+						'Parece que você ainda não definiu o seu humor, vou colocar como neutro para você ok?',
 					);
-					await user.send("Caso queira mudar é só me avisar");
+					await user.send('Caso queira mudar é só me avisar');
 				}
-			})
+			}),
 		);
 
 		client.destroy();

@@ -1,6 +1,6 @@
-const { Client } = require("discord.js");
-const { token } = require("../config/bot");
-const GetRandomGif = require("../services/getRandomGif");
+const { Client } = require('discord.js');
+const { token } = require('../config/bot');
+const GetRandomGif = require('../services/getRandomGif');
 const client = new Client();
 
 async function planningReminder() {
@@ -9,13 +9,13 @@ async function planningReminder() {
 
 		await client.fetchApplication();
 
-		console.log("Enviando lembrete da planning");
+		console.log('Enviando lembrete da planning');
 
-		const gif = await GetRandomGif.run("dont forget remember");
+		const gif = await GetRandomGif.run('dont forget remember');
 
-		const channel = client.channels.cache.find((ch) => ch.name === "teste");
+		const channel = client.channels.cache.find(ch => ch.name === 'teste');
 
-		await channel.send("@everyone hoje é dia de planning");
+		await channel.send('@everyone hoje é dia de planning');
 
 		await channel.send(gif);
 
