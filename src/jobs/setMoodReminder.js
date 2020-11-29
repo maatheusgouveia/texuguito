@@ -6,7 +6,6 @@ const client = new Client();
 
 async function setMoodReminder() {
 	try {
-		console.log(token);
 		await client.login(token);
 
 		await client.fetchApplication();
