@@ -1,6 +1,7 @@
 const { Client } = require('discord.js');
 const { token } = require('../config/bot');
 const GetRandomGif = require('../services/getRandomGif');
+const reportErrors = require('../services/reportErrors');
 const client = new Client();
 
 async function planningReminder() {
@@ -21,7 +22,7 @@ async function planningReminder() {
 
 		client.destroy();
 	} catch (error) {
-		console.log(error);
+		reportErrors(client, error);
 	}
 }
 
