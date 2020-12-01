@@ -8,8 +8,15 @@ module.exports = {
 			'id',
 			'email',
 			'username',
+			'password',
 		);
-		return users;
+
+		return users.map(user => ({
+			...user,
+			password: Crypto.AES.decrypt(user.password, secret).toString(
+				Crypto.enc.Utf8,
+			),
+		}));
 	},
 
 	async create({ id, username, email, password }) {

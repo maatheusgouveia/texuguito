@@ -39,13 +39,17 @@ async function setMoodReminder() {
 					);
 					await discordUser.send('Caso queira mudar é só me avisar');
 				}
+				console.log(`Lembrete enviado para ${user.username}`);
 			}),
 		);
 
 		client.destroy();
 	} catch (error) {
+		console.log(error);
 		reportErrors(client, error);
 	}
 }
+
+setMoodReminder();
 
 module.exports = setMoodReminder;

@@ -57,6 +57,7 @@ module.exports = {
 
 			return { nome };
 		} catch (error) {
+			console.log(error);
 			return null;
 		}
 	},
@@ -86,6 +87,7 @@ module.exports = {
 
 			return currentMood.data;
 		} catch (error) {
+			console.log(error);
 			return null;
 		}
 	},
