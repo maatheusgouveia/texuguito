@@ -69,6 +69,14 @@ try {
 
 					let [, usuario, senha] = msg.content.split(' ');
 
+					if (!usuario || !senha) {
+						msg.reply(
+							'Parece que está faltando alguma coisa, você precisa seguir o padrão `!login texuguito@cadmus.com.br 123456`',
+						);
+
+						return;
+					}
+
 					const user = await UserController.create({
 						id: msg.author.id,
 						username: msg.author.username,
