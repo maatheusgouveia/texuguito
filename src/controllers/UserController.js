@@ -74,4 +74,13 @@ module.exports = {
 			return null;
 		}
 	},
+
+	async destroy(id) {
+		try {
+			await connection('users').delete().where({ id });
+		} catch (error) {
+			console.log(error);
+			return false;
+		}
+	},
 };

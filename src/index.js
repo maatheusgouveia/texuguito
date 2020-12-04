@@ -145,9 +145,10 @@ try {
 					msg.author.send(
 						'O comando é `!login texuguito@cadmus.com.br 123456`, você só precisa substituir o primeiro parâmetro pelo seu email e o segundo pela sua senha',
 					);
-					return msg.author.send(
+					msg.author.send(
 						'Pode ficar tranquilo porque é tudo criptografado',
 					);
+					return msg.channel.stopTyping();
 				}
 
 				const { email, password } = user;
@@ -176,7 +177,7 @@ try {
 					const { nome } = response;
 
 					msg.reply(
-						`Já coloquei o humor ${sentimentos[sentimento]} para o usuário ${nome}`,
+						`Coloquei o humor ${sentimentos[sentimento]} para o usuário ${nome}`,
 					);
 				} else {
 					msg.reply('Parece que algo deu errado');
@@ -188,6 +189,18 @@ try {
 			if (msg.content.startsWith(`${prefix}clear`)) {
 				const [, qtd] = msg.content.split(' ');
 				msg.channel.bulkDelete(qtd || 100);
+			}
+
+			if (msg.content.startsWith(`${prefix}logoff`)) {
+				const success = await UserController.destroy(msg.author.id);
+
+				if (success) {
+					msg.reply(
+						'Já apaguei suas credenciais, quando quiser minha ajuda novamente estarei esperando :)',
+					);
+				} else {
+					msg.reply('Parece que algo deu errado');
+				}
 			}
 		}
 	});
