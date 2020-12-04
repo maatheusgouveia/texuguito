@@ -74,7 +74,7 @@ try {
 							'Parece que está faltando alguma coisa, você precisa seguir o padrão `!login texuguito@cadmus.com.br 123456`',
 						);
 
-						return;
+						return msg.channel.stopTyping();
 					}
 
 					const user = await UserController.create({
@@ -92,6 +92,7 @@ try {
 					msg.channel.stopTyping();
 				} catch (error) {
 					msg.reply('Não consegui salvar suas credenciais');
+					msg.channel.stopTyping();
 				}
 			}
 
