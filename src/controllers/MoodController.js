@@ -62,9 +62,9 @@ module.exports = {
 		}
 	},
 
-	async find(username) {
+	async find(id) {
 		try {
-			const { email, password } = await UserController.find(username);
+			const { email, password } = await UserController.find(id);
 
 			const user = await axios.post(
 				'https://apiteams.goobee.com.br/api/Token',

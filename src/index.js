@@ -77,6 +77,22 @@ try {
 						return msg.channel.stopTyping();
 					}
 
+					const loginIsValid = await MoodController.create({
+						email: usuario,
+						password: senha,
+						mood: 2,
+					});
+
+					if (!loginIsValid) {
+						msg.channel.stopTyping();
+						return msg.reply(
+							'Não foi possível validar suas credenciais',
+						);
+						return msg.reply(
+							'Verifique as informações digitadas e tente novamente',
+						);
+					}
+
 					const user = await UserController.create({
 						id: msg.author.id,
 						username: msg.author.username,
@@ -85,7 +101,10 @@ try {
 					});
 
 					if (user) {
-						msg.reply('Já salvei suas credenciais');
+						msg.reply('Suas credenciais foram salvas com sucesso!');
+						msg.reply(
+							'Também coloquei o seu humor como neutro, caso queira mudar é só me falar',
+						);
 					} else {
 						msg.reply('Não consegui salvar suas credenciais');
 					}
