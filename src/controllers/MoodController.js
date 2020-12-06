@@ -1,18 +1,18 @@
 const axios = require('axios').default;
+const SessionController = require('./SessionController');
+const { index } = require('./UserController');
 const UserController = require('./UserController');
 
 module.exports = {
+	async index() {
+		// TODO: https://apiteams.goobee.com.br/api/PraticaAgil/PegarCalendarioNiko/2aa9be32-b639-45f2-dc3d-08d7e1fda38a/12/2020
+	},
 	async create({ email, password, mood }) {
 		try {
-			const user = await axios.post(
-				'https://apiteams.goobee.com.br/api/Token',
-				{
-					usuario: email,
-					senha: password,
-				},
-			);
-
-			const { token, nome, idPessoa } = user.data;
+			const { token, nome, idPessoa } = await SessionController.create({
+				email,
+				password,
+			});
 
 			const currentMood = await axios.get(
 				`https://apiteams.goobee.com.br/api/Home/InformaHumor?idPessoa=${idPessoa}`,
@@ -66,15 +66,10 @@ module.exports = {
 		try {
 			const { email, password } = await UserController.find(id);
 
-			const user = await axios.post(
-				'https://apiteams.goobee.com.br/api/Token',
-				{
-					usuario: email,
-					senha: password,
-				},
-			);
-
-			const { token, idPessoa } = user.data;
+			const { token, idPessoa } = await SessionController.create({
+				email,
+				password,
+			});
 
 			const currentMood = await axios.get(
 				`https://apiteams.goobee.com.br/api/Home/InformaHumor?idPessoa=${idPessoa}`,

@@ -4,6 +4,7 @@ const { token, prefix } = require('./config/bot');
 const UserController = require('./controllers/UserController');
 const MoodController = require('./controllers/MoodController');
 const sentryConfig = require('./config/sentry');
+const SessionController = require('./controllers/SessionController');
 
 const client = new Client();
 
@@ -67,7 +68,7 @@ try {
 						);
 					}
 
-					let [, usuario, senha] = msg.content.split(' ');
+					let [, usuario, senha, humor] = msg.content.split(' ');
 
 					if (!usuario || !senha) {
 						msg.reply(
@@ -77,10 +78,15 @@ try {
 						return msg.channel.stopTyping();
 					}
 
-					const loginIsValid = await MoodController.create({
-						email: usuario,
-						password: senha,
-						mood: 2,
+					// const loginIsValid = await MoodController.create({
+					// 	email: usuario,
+					// 	password: senha,
+					// 	mood: 2,
+					// });
+
+					const loginIsValid = await SessionController.create({
+						email,
+						password,
 					});
 
 					if (!loginIsValid) {
@@ -102,9 +108,9 @@ try {
 
 					if (user) {
 						msg.reply('Suas credenciais foram salvas com sucesso!');
-						msg.reply(
-							'Também coloquei o seu humor como neutro, caso queira mudar é só me falar',
-						);
+						// msg.reply(
+						// 	'Também coloquei o seu humor como neutro, caso queira mudar é só me falar',
+						// );
 					} else {
 						msg.reply('Não consegui salvar suas credenciais');
 					}
