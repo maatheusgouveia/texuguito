@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 module.exports = {
 	async create({ email, password }) {
 		try {

@@ -85,8 +85,8 @@ try {
 					// });
 
 					const loginIsValid = await SessionController.create({
-						email,
-						password,
+						email: usuario,
+						password: senha,
 					});
 
 					if (!loginIsValid) {
@@ -128,8 +128,9 @@ try {
 			}
 
 			if (msg.content.startsWith(`${prefix}humor`)) {
+				msg.channel.startTyping();
+
 				if (msg.content.includes('-h')) {
-					msg.channel.startTyping();
 					msg.reply(
 						'Para definir um novo humor ou editar o existente basta utilizar o comando `!humor`, ele recebe apenas um parâmetro que deve ' +
 							'ser uma das opções: \n' +
@@ -141,7 +142,66 @@ try {
 					return;
 				}
 
-				msg.channel.startTyping();
+				if (msg.content.includes('--list')) {
+					const { email, password } = await UserController.find(
+						msg.author.id,
+					);
+
+					const list = await MoodController.index({
+						email,
+						password,
+					});
+
+					const formattedList = new MessageEmbed()
+						.setColor('#0099ff')
+						.setTitle('Humor dos usuários')
+						.setTimestamp();
+
+					list.forEach(({ sentimento, nome, dia }) => {
+						let formattedMood;
+
+						switch (sentimento) {
+							case 0:
+								formattedMood = '-';
+								break;
+
+							case 1:
+								formattedMood = 'feliz';
+								break;
+
+							case 2:
+								formattedMood = 'neutro';
+								break;
+
+							case 3:
+								formattedMood = 'irritado';
+								break;
+						}
+
+						formattedList.addFields(
+							{
+								name: '.',
+								value: '.',
+								inline: true,
+							},
+							{
+								name: 'Usuário',
+								value: nome,
+								inline: true,
+							},
+							{
+								name: 'Humor',
+								value: formattedMood,
+								inline: true,
+							},
+						);
+					});
+
+					msg.reply(formattedList);
+
+					return msg.channel.stopTyping();
+				}
+
 				const user = await UserController.find(msg.author.id);
 
 				if (!user || !user.email || !user.password) {
@@ -169,7 +229,7 @@ try {
 					} else if (sentimento === 'irritado') {
 						sentimento = 3;
 					} else {
-						msg.reply('Não conheço esse sentimento');
+						return msg.reply('Não conheço esse sentimento');
 					}
 				}
 
