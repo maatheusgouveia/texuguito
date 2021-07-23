@@ -17,7 +17,7 @@ try {
 	});
 
 	// Lembrete de daily
-	cron.schedule('59 10 * * 2,3,4,5', () => dailyReminder(), {
+	cron.schedule('14 10 * * 2,3,4,5', () => dailyReminder(), {
 		timezone: 'America/Sao_Paulo',
 	});
 
